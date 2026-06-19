@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+  namespace: homeserver
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: jellyfin
+
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+
+    spec:
+      securityContext:
+        fsGroup: 1000
+
+      containers:
+        - name: jellyfin
+          image: lscr.io/linuxserver/jellyfin:latest
+          imagePullPolicy: IfNotPresent
+
+          env:
+            - name: PUID
+              value: "1000"
+
+            - name: PGID
+              value: "1000"
+
+            - name: TZ
+              value: Europe/Madrid
+
+          ports:
+            - containerPort: 8096
+              name: http
+
+          volumeMounts:
+            - name: config
+              mountPath: /config
+
+            - name: cache
+              mountPath: /config/cache
+
+            - name: movies
+              mountPath: /data/movies
+              readOnly: true
+
+            - name: tvshows
+              mountPath: /data/tvshows
+              readOnly: true
+
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: jellyfin-data
+
+        - name: cache
+          emptyDir: {}
+
+        - name: movies
+          hostPath:
+            path: /mnt/storage/media/movies
+            type: Directory
+
+        - name: tvshows
+          hostPath:
+            path: /mnt/storage/media/tv
+            type: Directory

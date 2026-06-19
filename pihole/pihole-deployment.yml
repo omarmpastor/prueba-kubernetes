@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pihole
+  namespace: homeserver
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: pihole
+
+  template:
+    metadata:
+      labels:
+        app: pihole
+
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+
+      containers:
+      - name: pihole
+        image: pihole/pihole:latest
+
+        env:
+        - name: TZ
+          value: Europe/Madrid
+
+        - name: FTLCONF_webserver_api_password
+          valueFrom:
+            secretKeyRef:
+              name: pihole-secret
+              key: password
+
+        - name: FTLCONF_dns_listeningMode
+          value: "ALL"
+
+        - name: FTLCONF_webserver_port
+          value: "8084"
+
+        volumeMounts:
+        - name: pihole-data
+          mountPath: /etc/pihole
+
+      volumes:
+      - name: pihole-data
+        persistentVolumeClaim:
+          claimName: pihole-data
