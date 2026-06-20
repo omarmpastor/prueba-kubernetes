@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: heimdall
+  namespace: homeserver
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: heimdall
+  
+  template:
+    metadata:
+      labels:
+        app: heimdall
+    
+    spec:
+      securityContext:
+        fsGroup: 1000
+      
+      containers:
+        - name: heimdall
+          image: lscr.io/linuxserver/heimdall:latest
+          imagePullPolicy: IfNotPresent
+
+          env:
+            - name: PUID
+              value: "1000"
+            
+            - name: PGID
+              value: "1000"
+            
+            - name: TZ
+              value: Europe/Madrid
+          
+          ports:
+            - containerPort: 80
+              name: http
+          
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: heimdall-data
+
+          
