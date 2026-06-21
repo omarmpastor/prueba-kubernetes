@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jellyfin-deployment
+  name: qbittorrent-deployment
   namespace: homeserver
 spec:
   replicas: 1
 
   selector:
     matchLabels:
-      app: jellyfin
+      app: qbittorrent
 
   template:
     metadata:
       labels:
-        app: jellyfin
+        app: qbittorrent
 
     spec:
       securityContext:
         fsGroup: 1000
 
       containers:
-        - name: jellyfin
-          image: lscr.io/linuxserver/jellyfin:latest
+        - name: qbittorrent
+          image: lscr.io/linuxserver/qbittorrent:latest
           imagePullPolicy: IfNotPresent
 
           env:
@@ -33,40 +33,42 @@ spec:
 
             - name: TZ
               value: Europe/Madrid
+            
+            - name: WEBUI_PORT
+              value: "8090"
 
           ports:
-            - containerPort: 8096
+            - containerPort: 8090
               name: http
+              protocol: TCP
+
+            - containerPort: 6881
+              name: bittorrent-tcp
+              protocol: TCP
+
+            - containerPort: 6881
+              name: bittorrent-udp
+              protocol: UDP
 
           volumeMounts:
             - name: config
               mountPath: /config
 
-            - name: cache
-              mountPath: /config/cache
-
-            - name: movies
-              mountPath: /data/movies
+            - name: downloads
+              mountPath: /downloads
               readOnly: true
 
             - name: tvshows
-              mountPath: /data/tvshows
+              mountPath: /storage/TV
               readOnly: true
 
       volumes:
         - name: config
           persistentVolumeClaim:
-            claimName: jellyfin-pvc-config
+            claimName: qbittorrent-pvc-config
 
-        - name: cache
-          emptyDir: {}
-
-        - name: movies
+        - name: downloads
           hostPath:
-            path: /mnt/storage/media/movies
+            path: /mnt/storage/torrents
             type: Directory
 
-        - name: tvshows
-          hostPath:
-            path: /mnt/storage/media/tv
-            type: Directory

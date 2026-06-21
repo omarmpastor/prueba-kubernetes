@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: qbittorrent-svc
+  namespace: homeserver
+spec:
+  selector:
+    app: qbittorrent
+
+  ports:
+    - name: http
+      port: 8090
+      targetPort: 8090
+      protocol: TCP
+
+    - name: bittorrent-tcp
+      port: 6881
+      targetPort: 6881
+      protocol: TCP
+
+    - name: bittorrent-udp
+      port: 6881
+      targetPort: 6881
+      protocol: UDP
+
+  type: ClusterIP
+  

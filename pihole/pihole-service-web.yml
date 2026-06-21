@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: pihole-web
+  name: pihole-svc
   namespace: homeserver
 
 spec:

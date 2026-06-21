@@ -1,50 +1,49 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: heimdall-deployment
+  name: jackett-deployment
   namespace: homeserver
 spec:
   replicas: 1
 
   selector:
     matchLabels:
-      app: heimdall
-  
+      app: jackett
+
   template:
     metadata:
       labels:
-        app: heimdall
-    
+        app: jackett
+
     spec:
       securityContext:
         fsGroup: 1000
-      
+
       containers:
-        - name: heimdall
-          image: lscr.io/linuxserver/heimdall:latest
+        - name: jackett
+          image: lscr.io/linuxserver/jackett:latest
           imagePullPolicy: IfNotPresent
 
           env:
             - name: PUID
               value: "1000"
-            
+
             - name: PGID
               value: "1000"
-            
+
             - name: TZ
               value: Europe/Madrid
-          
+
           ports:
-            - containerPort: 80
+            - containerPort: 9117
               name: http
-          
+
           volumeMounts:
             - name: config
               mountPath: /config
-      
+
       volumes:
         - name: config
           persistentVolumeClaim:
-            claimName: heimdall-pvc-config
+            claimName: jackett-pvc-config
 
-          

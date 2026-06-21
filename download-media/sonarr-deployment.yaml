@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jellyfin-deployment
+  name: sonarr-deployment
   namespace: homeserver
 spec:
   replicas: 1
 
   selector:
     matchLabels:
-      app: jellyfin
+      app: sonarr
 
   template:
     metadata:
       labels:
-        app: jellyfin
+        app: sonarr
 
     spec:
       securityContext:
         fsGroup: 1000
 
       containers:
-        - name: jellyfin
-          image: lscr.io/linuxserver/jellyfin:latest
+        - name: sonarr
+          image: lscr.io/linuxserver/sonarr:latest
           imagePullPolicy: IfNotPresent
 
           env:
@@ -35,38 +35,32 @@ spec:
               value: Europe/Madrid
 
           ports:
-            - containerPort: 8096
+            - containerPort: 8989
               name: http
 
           volumeMounts:
             - name: config
               mountPath: /config
 
-            - name: cache
-              mountPath: /config/cache
-
-            - name: movies
-              mountPath: /data/movies
+            - name: downloads
+              mountPath: /downloads
               readOnly: true
 
             - name: tvshows
-              mountPath: /data/tvshows
+              mountPath: /storage/TV
               readOnly: true
 
       volumes:
         - name: config
           persistentVolumeClaim:
-            claimName: jellyfin-pvc-config
+            claimName: sonarr-pvc-config
 
-        - name: cache
-          emptyDir: {}
-
-        - name: movies
+        - name: downloads
           hostPath:
-            path: /mnt/storage/media/movies
+            path: /mnt/storage/torrents
             type: Directory
 
         - name: tvshows
           hostPath:
-            path: /mnt/storage/media/tv
+            path: /mnt/media/tv
             type: Directory

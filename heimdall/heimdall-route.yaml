@@ -1,7 +1,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: heimdall
+  name: heimdall-route
   namespace: homeserver
 
 spec:
@@ -13,5 +13,5 @@ spec:
 
   rules:
   - backendRefs:
-    - name: heimdall
+    - name: heimdall-svc
       port: 80

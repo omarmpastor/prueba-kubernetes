@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pihole
+  name: pihole-deployment
   namespace: homeserver
 
 spec:
@@ -41,10 +41,10 @@ spec:
           value: "8084"
 
         volumeMounts:
-        - name: pihole-data
+        - name: pihole-config
           mountPath: /etc/pihole
 
       volumes:
-      - name: pihole-data
+      - name: pihole-config
         persistentVolumeClaim:
-          claimName: pihole-data
+          claimName: pihole-pvc-config

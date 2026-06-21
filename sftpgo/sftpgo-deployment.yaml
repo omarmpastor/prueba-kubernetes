@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sftpgo
+  name: sftpgo-deployment
   namespace: homeserver
 spec:
   replicas: 1
@@ -47,7 +47,7 @@ spec:
       volumes:
         - name: config
           persistentVolumeClaim:
-            claimName: sftpgo-data
+            claimName: sftpgo-pvc-config
 
         - name: data
           hostPath:

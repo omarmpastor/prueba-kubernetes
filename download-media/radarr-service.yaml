@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: jellyfin-svc
+  name: radarr-svc
   namespace: homeserver
 spec:
   selector:
-    app: jellyfin
+    app: radarr
 
   ports:
-  - port: 8096
-    targetPort: 8096
+  - port: 7878
+    targetPort: 7878
 
   type: ClusterIP
   

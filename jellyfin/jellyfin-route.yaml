@@ -1,7 +1,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: jellyfin
+  name: jellyfin-route
   namespace: homeserver
 
 spec:
@@ -13,6 +13,6 @@ spec:
 
   rules:
   - backendRefs:
-    - name: jellyfin
+    - name: jellyfin-svc
       port: 8096
       
