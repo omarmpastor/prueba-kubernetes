@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitea-deployment
+  namespace: homeserver
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: gitea
+  
+  template:
+    metadata:
+      labels:
+        app: gitea
+    
+    spec:
+      containers:
+        - name: gitea
+          image: docker.gitea.com/gitea:1.25.5
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 3000
+            - containerPort: 2222
+
+          volumeMounts:
+            - name: config
+              mountPath: /data
+            
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+      
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: gitea-pvc-config
+
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+            type: File
