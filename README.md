@@ -51,4 +51,5 @@ kubectl apply -f heimdall
 kubectl apply -f jellyfin
 kubectl apply -f pihole
 kubectl apply -f sftpgo
+kubectl apply -f gitea
 ```
