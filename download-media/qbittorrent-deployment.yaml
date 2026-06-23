@@ -56,7 +56,6 @@ spec:
 
             - name: downloads
               mountPath: /downloads
-              readOnly: true
 
       volumes:
         - name: config

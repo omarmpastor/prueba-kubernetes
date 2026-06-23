@@ -44,11 +44,9 @@ spec:
 
             - name: downloads
               mountPath: /downloads
-              readOnly: true
 
             - name: tvshows
               mountPath: /storage/TV
-              readOnly: true
 
       volumes:
         - name: config

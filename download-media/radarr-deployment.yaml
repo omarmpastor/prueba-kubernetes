@@ -44,11 +44,9 @@ spec:
 
             - name: downloads
               mountPath: /downloads
-              readOnly: true
 
             - name: movies
               mountPath: /storage/Movies
-              readOnly: true
 
       volumes:
         - name: config
