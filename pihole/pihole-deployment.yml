@@ -17,12 +17,27 @@ spec:
         app: pihole
 
     spec:
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
-
       containers:
       - name: pihole
         image: pihole/pihole:latest
+      
+      # hostNetwork: true
+      # dnsPolicy: ClusterFirstWithHostNet
+
+        ports:
+          - name: http
+            containerPort: 80
+            protocol: TCP
+          
+          - name: dns-tcp
+            containerPort: 53
+            hostPort: 53
+            protocol: TCP
+          
+          - name: dns-udp
+            containerPort: 53
+            hostPort: 53
+            protocol: UDP
 
         env:
         - name: TZ
@@ -37,8 +52,8 @@ spec:
         - name: FTLCONF_dns_listeningMode
           value: "ALL"
 
-        - name: FTLCONF_webserver_port
-          value: "8084"
+        # - name: FTLCONF_webserver_port
+        #   value: "8084"
 
         volumeMounts:
         - name: pihole-config
