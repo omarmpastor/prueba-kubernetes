@@ -46,8 +46,8 @@ spec:
         - name: FTLCONF_webserver_api_password
           valueFrom:
             secretKeyRef:
-              name: pihole-secret
-              key: password
+              name: homeserver-secret
+              key: APP_PASSWORD
 
         - name: FTLCONF_dns_listeningMode
           value: "ALL"
